@@ -1,0 +1,36 @@
+{
+    "cSpell.words": [
+        "Bootcamp",
+        "cloudinary",
+        "mapbox",
+        "resave",
+        "starability",
+        "Udemy",
+        "unclustered",
+        "virtuals",
+        "yelpcamp"
+    ],
+    "emmet.includeLanguages": {
+        "ejs": "html"
+    },
+    "[html]": {
+        "editor.defaultFormatter": "vscode.html-language-features"
+    },
+    "html.format.extraLiners": "body",
+    "html.format.templating": true,
+    "html.format.indentInnerHtml": true,
+    "html.format.wrapLineLength": 100,
+    "editor.insertSpaces": true,
+    "editor.tabSize": 4,
+    "files.associations": {
+        "*.ejs": "html"
+    },
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "files.trimTrailingWhitespace": true,
+    "markdownlint.config": {
+        "MD024": {
+            "siblings_only": true
+        }
+    }
+}

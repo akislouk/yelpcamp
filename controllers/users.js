@@ -1,39 +1,53 @@
-const User = require('../models/user');
+const passport = require("passport");
+const User = require("../models/user");
 
-module.exports.renderRegister = (req, res) => {
-    res.render('users/register');
-}
+/** Displays the registration form */
+module.exports.register = (req, res) =>
+    res.render("users/register", { title: "Register" });
 
-module.exports.register = async (req, res, next) => {
+/** Creates a new user */
+module.exports.create = async (req, res) => {
     try {
-        const { email, username, password } = req.body;
-        const user = new User({ email, username });
-        const registeredUser = await User.register(user, password);
-        req.login(registeredUser, err => {
+        // Destructure the request body
+        const { username, email, password } = req.body;
+
+        // Create the user
+        const user = new User({ username, email });
+        const newUser = await User.register(user, password);
+
+        // Log the user in
+        req.login(newUser, (err) => {
             if (err) return next(err);
-            req.flash('success', 'Welcome to Yelp Camp!');
-            res.redirect('/campgrounds');
-        })
-    } catch (e) {
-        req.flash('error', e.message);
-        res.redirect('register');
+
+            // Display a success message and redirect to the campgrounds index
+            req.flash("success", "Welcome to YelpCamp!");
+            res.redirect("/campgrounds");
+        });
+    } catch (error) {
+        // Display an error message and redirect to the registration form
+        req.flash("error", error.message);
+        res.redirect("/register");
     }
-}
+};
 
-module.exports.renderLogin = (req, res) => {
-    res.render('users/login');
-}
+/** Displays the login form */
+module.exports.loginForm = (req, res) => res.render("users/login", { title: "Login" });
 
-module.exports.login = (req, res) => {
-    req.flash('success', 'welcome back!');
-    const redirectUrl = req.session.returnTo || '/campgrounds';
-    delete req.session.returnTo;
-    res.redirect(redirectUrl);
-}
+/** Logs the user in */
+module.exports.login = passport.authenticate("local", {
+    keepSessionInfo: true,
+    failureFlash: true,
+    failureRedirect: "/login",
+    successFlash: "Welcome back!",
+    successReturnToOrRedirect: "/campgrounds",
+});
 
-module.exports.logout = (req, res) => {
-    req.logout();
-    // req.session.destroy();
-    req.flash('success', "Goodbye!");
-    res.redirect('/campgrounds');
-}
+/** Logs the user out */
+module.exports.logout = async (req, res, next) =>
+    req.logout((err) => {
+        if (err) return next(err);
+
+        // Display a success message and redirect to the home page
+        req.flash("success", "You are now signed out. Goodbye!");
+        res.redirect("/campgrounds");
+    });

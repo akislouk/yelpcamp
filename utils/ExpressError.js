@@ -1,3 +1,4 @@
+/** Extends the Error class to include a status code */
 class ExpressError extends Error {
     constructor(message, statusCode) {
         super();
